@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Viewport already good for mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kirmani Partners LP - Investment Pitchbook</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
@@ -18,49 +19,351 @@
             --gray: rgba(255,255,255,0.08);
             --border: rgba(0,255,136,0.15);
         }
-        html, body { width: 100%; height: 100%; background: var(--dark); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; overflow: hidden; color: var(--text-light); }
-        .presentation-wrapper { width: 100%; height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle at 50% 50%, rgba(0,255,136,0.06) 0%, transparent 70%); }
-        .slide { width: 100%; height: 100%; display: none; opacity: 0; transition: opacity 0.6s ease; padding: 60px; position: relative; overflow-y: auto; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: var(--dark);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            /* allow page to scroll on mobile */
+            overflow-x: hidden;
+            overflow-y: auto;
+            color: var(--text-light);
+        }
+        .presentation-wrapper {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, rgba(0,255,136,0.06) 0%, transparent 70%);
+            padding-bottom: 90px; /* space for fixed nav-bar */
+        }
+        .slide {
+            width: 100%;
+            min-height: calc(100vh - 90px);
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            padding: 60px;
+            position: relative;
+            overflow-y: auto;
+        }
         .slide.active { display: flex; opacity: 1; flex-direction: column; }
-        .slide::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M 120 0 L 0 0 0 120" fill="none" stroke="rgba(0,255,136,0.08)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="%2305070f"/></svg>'); pointer-events: none; z-index: 0; opacity: 0.4; }
-        .slide-content { position: relative; z-index: 10; width: 100%; flex: 1; display: flex; flex-direction: column; }
-        
-        .slide.title-slide { background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%); justify-content: center; align-items: center; text-align: center; }
-        .slide.title-slide h1 { font-size: 96px; font-weight: 900; letter-spacing: -4px; background: linear-gradient(90deg, #ffffff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 10px 40px rgba(0,255,136,0.3); }
-        .slide.title-slide h2 { font-size: 52px; font-weight: 400; color: var(--accent); margin-top: 20px; letter-spacing: 2px; opacity: 0.9; }
-        .glow-line { height: 4px; width: 300px; background: var(--accent); margin: 60px auto; box-shadow: 0 0 30px var(--accent-glow); border-radius: 2px; }
-        
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml,<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M 120 0 L 0 0 0 120" fill="none" stroke="rgba(0,255,136,0.08)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="%2305070f"/></svg>');
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+        .slide-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .slide.title-slide h1 {
+            font-size: 96px;
+            font-weight: 900;
+            letter-spacing: -4px;
+            background: linear-gradient(90deg, #ffffff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 40px rgba(0,255,136,0.3);
+        }
+        .slide.title-slide h2 {
+            font-size: 52px;
+            font-weight: 400;
+            color: var(--accent);
+            margin-top: 20px;
+            letter-spacing: 2px;
+            opacity: 0.9;
+        }
+        .glow-line {
+            height: 4px;
+            width: 300px;
+            background: var(--accent);
+            margin: 60px auto;
+            box-shadow: 0 0 30px var(--accent-glow);
+            border-radius: 2px;
+        }
+
         .slide-header { margin-bottom: 40px; }
-        .slide-header h1 { font-size: 62px; font-weight: 800; color: var(--accent); letter-spacing: -1.5px; position: relative; display: inline-block; }
-        .slide-header h1::after { content: ''; position: absolute; bottom: -12px; left: 0; width: 120%; height: 6px; background: linear-gradient(90deg, var(--accent), transparent); border-radius: 3px; }
-        .slide-header p { font-size: 24px; margin-top: 30px; opacity: 0.85; font-weight: 300; color: var(--text-light); }
-        
-        .slide-body { flex: 1; overflow-y: auto; padding-top: 20px; font-size: 22px; line-height: 1.8; color: var(--text-light); }
-        .slide-body h3 { font-size: 32px; color: var(--accent); margin: 30px 0 20px 0; font-weight: 700; }
+        .slide-header h1 {
+            font-size: 62px;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: -1.5px;
+            position: relative;
+            display: inline-block;
+        }
+        .slide-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 120%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            border-radius: 3px;
+        }
+        .slide-header p {
+            font-size: 24px;
+            margin-top: 30px;
+            opacity: 0.85;
+            font-weight: 300;
+            color: var(--text-light);
+        }
+
+        .slide-body {
+            flex: 1;
+            overflow-y: visible;
+            padding-top: 20px;
+            font-size: 22px;
+            line-height: 1.8;
+            color: var(--text-light);
+        }
+        .slide-body h3 {
+            font-size: 32px;
+            color: var(--accent);
+            margin: 30px 0 20px 0;
+            font-weight: 700;
+        }
         .slide-body ul { list-style: none; margin-left: 0; }
-        .slide-body li { margin-bottom: 18px; position: relative; padding-left: 35px; color: var(--text-light); }
-        .slide-body li:before { content: '✓'; position: absolute; left: 0; color: var(--accent); font-weight: bold; font-size: 28px; }
-        
-        .metric-box { background: linear-gradient(135deg, rgba(0,255,136,0.12), rgba(0,255,136,0.05)); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 30px var(--accent-glow); padding: 32px; border-radius: 16px; backdrop-filter: blur(10px); margin: 25px 0; }
-        .metric-box strong { color: var(--accent); font-size: 28px; font-weight: 800; display: block; margin-bottom: 12px; text-shadow: 0 0 15px var(--accent-glow); }
-        
-        .data-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 30px 0; }
-        .data-card { background: linear-gradient(135deg, rgba(0,255,136,0.12), rgba(0,255,136,0.05)); border: 1px solid var(--border); padding: 30px; border-radius: 12px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
-        .data-value { font-size: 56px; font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: 12px; text-shadow: 0 0 20px var(--accent-glow); }
-        .data-label { font-size: 16px; color: rgba(255,255,255,0.75); font-weight: 500; }
-        
-        table { width: 100%; border-collapse: collapse; margin: 25px 0; font-size: 20px; }
-        table th, table td { padding: 18px; text-align: left; border-bottom: 1px solid var(--border); color: var(--text-light); }
-        table th { background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.08)); color: var(--accent); font-weight: 700; font-size: 22px; }
+        .slide-body li {
+            margin-bottom: 18px;
+            position: relative;
+            padding-left: 35px;
+            color: var(--text-light);
+        }
+        .slide-body li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 28px;
+        }
+
+        .metric-box {
+            background: linear-gradient(135deg, rgba(0,255,136,0.12), rgba(0,255,136,0.05));
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 30px var(--accent-glow);
+            padding: 32px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            margin: 25px 0;
+        }
+        .metric-box strong {
+            color: var(--accent);
+            font-size: 28px;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 12px;
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .data-card {
+            background: linear-gradient(135deg, rgba(0,255,136,0.12), rgba(0,255,136,0.05));
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .data-value {
+            font-size: 56px;
+            font-weight: 900;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 12px;
+            text-shadow: 0 0 20px var(--accent-glow);
+        }
+        .data-label {
+            font-size: 16px;
+            color: rgba(255,255,255,0.75);
+            font-weight: 500;
+        }
+
+        /* table container for horizontal scroll on mobile */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 20px;
+            min-width: 600px; /* help trigger horizontal scroll on small screens */
+        }
+        table th, table td {
+            padding: 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-light);
+        }
+        table th {
+            background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.08));
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 22px;
+        }
         table tr:hover { background: rgba(0,255,136,0.05); }
-        
-        .chart-container { position: relative; height: 500px; background: rgba(255,255,255,0.03); border-radius: 20px; padding: 30px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.5); margin: 30px 0; }
-        
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 90px; background: rgba(5,7,15,0.95); border-top: 1px solid var(--border); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 0 60px; z-index: 100; }
-        .slide-counter { font-size: 20px; font-weight: 600; color: var(--accent); letter-spacing: 2px; }
-        button { background: transparent; border: 2px solid var(--accent); color: var(--accent); padding: 16px 40px; font-size: 18px; font-weight: 700; border-radius: 50px; cursor: pointer; transition: all 0.4s; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 0 30px var(--accent-glow); }
-        button:hover { background: var(--accent); color: var(--primary); transform: translateY(-4px); box-shadow: 0 0 50px var(--accent-glow); }
+
+        .chart-container {
+            position: relative;
+            height: 500px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            margin: 30px 0;
+        }
+
+        .nav-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            height: 90px;
+            background: rgba(5,7,15,0.95);
+            border-top: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 60px;
+            z-index: 100;
+        }
+        .slide-counter {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 2px;
+        }
+        button {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+        button:hover {
+            background: var(--accent);
+            color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 0 50px var(--accent-glow);
+        }
         button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* --- Responsive tweaks --- */
+        @media (max-width: 1024px) {
+            .slide {
+                padding: 40px 30px 30px;
+            }
+            .slide-header h1 { font-size: 42px; }
+            .slide-header p { font-size: 18px; }
+            .slide-body { font-size: 18px; }
+            .slide-body h3 { font-size: 26px; }
+            .data-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .data-value { font-size: 40px; }
+            .chart-container { height: 380px; padding: 20px; }
+            .nav-bar { padding: 0 24px; height: 80px; }
+            .slide-counter { font-size: 16px; }
+            button { padding: 12px 26px; font-size: 14px; }
+        }
+
+        @media (max-width: 640px) {
+            .slide {
+                padding: 24px 16px 16px;
+            }
+            .slide.title-slide h1 {
+                font-size: 40px;
+                letter-spacing: -1px;
+            }
+            .slide.title-slide h2 {
+                font-size: 22px;
+                margin-top: 10px;
+            }
+            .glow-line {
+                width: 160px;
+                margin: 24px auto;
+            }
+            .slide-header h1 { font-size: 30px; }
+            .slide-header p { font-size: 16px; margin-top: 16px; }
+            .slide-body {
+                font-size: 16px;
+                line-height: 1.6;
+            }
+            .slide-body h3 { font-size: 20px; margin: 20px 0 12px; }
+            .slide-body li {
+                padding-left: 26px;
+                margin-bottom: 12px;
+            }
+            .slide-body li:before { font-size: 20px; }
+            .metric-box {
+                padding: 20px;
+                margin: 18px 0;
+            }
+            .metric-box strong { font-size: 20px; }
+            .data-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                margin: 20px 0;
+            }
+            .data-card { padding: 18px 14px; }
+            .data-value { font-size: 32px; }
+            .data-label { font-size: 14px; }
+
+            .chart-container {
+                height: 260px;
+                padding: 16px;
+                margin: 20px 0;
+            }
+
+            .nav-bar {
+                height: 70px;
+                padding: 0 12px;
+            }
+            .slide-counter { font-size: 14px; letter-spacing: 1px; }
+            button {
+                padding: 10px 16px;
+                font-size: 12px;
+                letter-spacing: 1px;
+                box-shadow: 0 0 18px var(--accent-glow);
+            }
+            button + button {
+                margin-left: 8px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -83,17 +386,19 @@
         <!-- SLIDE 2: TRACK RECORD TABLE + LOG CHART -->
         <div class="slide" data-slide="2" style="background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%);">
             <div class="slide-content">
-                <div class="slide-header"><h1>TRACK RECORD — NET-OF-FEE RETURNS</h1><p>Sep 2021 – Oct 2025 </p></div>
+                <div class="slide-header"><h1>TRACK RECORD — NET-OF-FEE RETURNS</h1><p>Sep 2021 – Oct 2025</p></div>
                 <div class="slide-body">
-                    <table>
-                        <tr><th>Year</th><th>Kirmani Net</th><th>S&P 500</th><th>Outperformance</th></tr>
-                        <tr><td>2021 (Sep-Dec)</td><td style="color: var(--accent);">+28.4%</td><td>+11.0%</td><td style="color: var(--accent);">+17.4pp</td></tr>
-                        <tr><td>2022</td><td style="color: var(--accent);">–8.4%</td><td>–18.1%</td><td style="color: var(--accent);">+9.7pp</td></tr>
-                        <tr><td>2023</td><td style="color: var(--accent);">+72.1%</td><td>+26.3%</td><td style="color: var(--accent);">+45.8pp</td></tr>
-                        <tr><td>2024</td><td style="color: var(--accent);">+61.3%</td><td>+23.3%</td><td style="color: var(--accent);">+38.0pp</td></tr>
-                        <tr><td>2025 YTD (Oct)</td><td style="color: var(--accent);">+38.7%</td><td>+21.2%</td><td style="color: var(--accent);">+17.5pp</td></tr>
-                        <tr style="font-weight: 700;"><td>Cumulative</td><td style="color: var(--accent); font-size: 24px;">+260.96%</td><td>+84.63%</td><td style="color: var(--accent); font-size: 24px;">+176.33pp</td></tr>
-                    </table>
+                    <div class="table-container">
+                        <table>
+                            <tr><th>Year</th><th>Kirmani Net</th><th>S&P 500</th><th>Outperformance</th></tr>
+                            <tr><td>2021 (Sep-Dec)</td><td style="color: var(--accent);">+28.4%</td><td>+11.0%</td><td style="color: var(--accent);">+17.4pp</td></tr>
+                            <tr><td>2022</td><td style="color: var(--accent);">–8.4%</td><td>–18.1%</td><td style="color: var(--accent);">+9.7pp</td></tr>
+                            <tr><td>2023</td><td style="color: var(--accent);">+72.1%</td><td>+26.3%</td><td style="color: var(--accent);">+45.8pp</td></tr>
+                            <tr><td>2024</td><td style="color: var(--accent);">+61.3%</td><td>+23.3%</td><td style="color: var(--accent);">+38.0pp</td></tr>
+                            <tr><td>2025 YTD (Oct)</td><td style="color: var(--accent);">+38.7%</td><td>+21.2%</td><td style="color: var(--accent);">+17.5pp</td></tr>
+                            <tr style="font-weight: 700;"><td>Cumulative</td><td style="color: var(--accent); font-size: 24px;">+260.96%</td><td>+84.63%</td><td style="color: var(--accent); font-size: 24px;">+176.33pp</td></tr>
+                        </table>
+                    </div>
                     <div class="chart-container"><canvas id="logChart"></canvas></div>
                 </div>
             </div>
@@ -122,15 +427,17 @@
                 <div class="slide-header"><h1>STATISTICAL PROOF</h1><p>Monthly returns vs S&P 500 | Sep 2021 – Oct 2025</p></div>
                 <div class="slide-body">
                     <div class="chart-container"><canvas id="scatterChart"></canvas></div>
-                    <table style="margin-top: 30px;">
-                        <tr><th>Risk Metric</th><th>Kirmani</th><th>S&P 500</th></tr>
-                        <tr><td>Sharpe Ratio</td><td style="color: var(--accent);">1.42</td><td>1.41</td></tr>
-                        <tr><td>Sortino Ratio</td><td style="color: var(--accent);">2.31</td><td>2.10</td></tr>
-                        <tr><td>Calmar Ratio</td><td style="color: var(--accent);">3.76</td><td>0.94</td></tr>
-                        <tr><td>Max Drawdown</td><td style="color: var(--accent);">–14.2%</td><td>–24.0%</td></tr>
-                        <tr><td>2022 Return</td><td style="color: var(--accent);">–8.4%</td><td>–18.1%</td></tr>
-                        <tr><td>% Positive Months</td><td style="color: var(--accent);">77.8%</td><td>66.7%</td></tr>
-                    </table>
+                    <div class="table-container" style="margin-top: 30px;">
+                        <table>
+                            <tr><th>Risk Metric</th><th>Kirmani</th><th>S&P 500</th></tr>
+                            <tr><td>Sharpe Ratio</td><td style="color: var(--accent);">1.42</td><td>1.41</td></tr>
+                            <tr><td>Sortino Ratio</td><td style="color: var(--accent);">2.31</td><td>2.10</td></tr>
+                            <tr><td>Calmar Ratio</td><td style="color: var(--accent);">3.76</td><td>0.94</td></tr>
+                            <tr><td>Max Drawdown</td><td style="color: var(--accent);">–14.2%</td><td>–24.0%</td></tr>
+                            <tr><td>2022 Return</td><td style="color: var(--accent);">–8.4%</td><td>–18.1%</td></tr>
+                            <tr><td>% Positive Months</td><td style="color: var(--accent);">77.8%</td><td>66.7%</td></tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -157,13 +464,15 @@
             <div class="slide-content">
                 <div class="slide-header"><h1>COMPETITIVE POSITIONING</h1><p>Elite-tier performance vs global hedge fund universe</p></div>
                 <div class="slide-body">
-                    <table>
-                        <tr><th>Metric</th><th>Kirmani</th><th>Percentile</th><th>Comparable Funds</th></tr>
-                        <tr><td>4-Year Annualized (Net)</td><td style="color: var(--accent); font-size: 24px;">+53.34%</td><td>Top 0.1%</td><td>Perceptive, Viking, Cormorant – all CLOSED</td></tr>
-                        <tr><td>R² to S&P 500</td><td style="color: var(--accent); font-size: 24px;">0.17</td><td>Top 1%</td><td>True diversifier</td></tr>
-                        <tr><td>Sharpe Ratio</td><td style="color: var(--accent);">1.42</td><td>Top 10%</td><td>Institutional benchmark</td></tr>
-                        <tr><td>Max Drawdown</td><td style="color: var(--accent);">–14.2%</td><td>Top 5%</td><td>2022 protection proven</td></tr>
-                    </table>
+                    <div class="table-container">
+                        <table>
+                            <tr><th>Metric</th><th>Kirmani</th><th>Percentile</th><th>Comparable Funds</th></tr>
+                            <tr><td>4-Year Annualized (Net)</td><td style="color: var(--accent); font-size: 24px;">+53.34%</td><td>Top 0.1%</td><td>Perceptive, Viking, Cormorant – all CLOSED</td></tr>
+                            <tr><td>R² to S&P 500</td><td style="color: var(--accent); font-size: 24px;">0.17</td><td>Top 1%</td><td>True diversifier</td></tr>
+                            <tr><td>Sharpe Ratio</td><td style="color: var(--accent);">1.42</td><td>Top 10%</td><td>Institutional benchmark</td></tr>
+                            <tr><td>Max Drawdown</td><td style="color: var(--accent);">–14.2%</td><td>Top 5%</td><td>2022 protection proven</td></tr>
+                        </table>
+                    </div>
                     <div class="metric-box"><strong>🎯 Unique Opportunity</strong><br>$422K AUM with $100K minimum entry before institutional scale ($5-15M capacity)</div>
                 </div>
             </div>
@@ -228,7 +537,7 @@
             </div>
         </div>
 
-        <!-- SLIDE 10: INVESTMENT THESIS (REMOVED TEAM SLIDE, RENUMBERED) -->
+        <!-- SLIDE 10: INVESTMENT THESIS -->
         <div class="slide" data-slide="10" style="background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%);">
             <div class="slide-content">
                 <div class="slide-header"><h1>INVESTMENT THESIS</h1><p>Complete framework summary</p></div>
@@ -255,7 +564,10 @@
 
     <div class="nav-bar">
         <div class="slide-counter"><span id="current-slide">1</span> / 10</div>
-        <div><button id="prev-btn">← Previous</button><button id="next-btn" style="margin-left: 20px;">Next →</button></div>
+        <div>
+            <button id="prev-btn">← Previous</button>
+            <button id="next-btn" style="margin-left: 20px;">Next →</button>
+        </div>
     </div>
 
     <script>
@@ -278,7 +590,7 @@
                 data: {
                     labels: dates,
                     datasets: [{
-                        label: 'Kirmani Partners (Net)',
+                        label: 'Kirmani (Net)',
                         data: kirmaniCumulative,
                         borderColor: '#00ff88',
                         backgroundColor: 'rgba(0,255,136,0.15)',
@@ -371,6 +683,10 @@
             document.getElementById('next-btn').disabled = (currentSlide === totalSlides);
             if (currentSlide === 2) setTimeout(initLogChart, 200);
             if (currentSlide === 4) setTimeout(initScatterChart, 200);
+            // scroll slide to top when changed, helpful on mobile
+            const active = document.querySelector('.slide.active');
+            if (active) active.scrollTop = 0;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         document.getElementById('prev-btn').addEventListener('click', () => showSlide(currentSlide - 1));
