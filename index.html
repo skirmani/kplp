@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirmani Partners LP - The Uncorrelated Alpha Engine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #192d55;
+            --accent: #2ecc71;
+            --dark: #0f1419;
+            --light: #f8f9fa;
+            --text-dark: #2c3e50;
+            --text-light: #ffffff;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: var(--dark);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            overflow: hidden;
+        }
+
+        .presentation-wrapper {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.6s ease-out forwards;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Background patterns */
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="%23ffffff" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="%23192d55" opacity="0.5"/></svg>');
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Title Slide */
+        .slide.title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, #0d1f38 100%);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide.title-slide .slide-content {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slide.title-slide h1 {
+            font-size: 80px;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .slide.title-slide h2 {
+            font-size: 44px;
+            color: var(--accent);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* Content Slides */
+        .slide.content-slide {
+            background: linear-gradient(to right, var(--primary) 0%, #1a3a5c 100%);
+        }
+
+        .slide-header {
+            margin-bottom: 50px;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 20px;
+        }
+
+        .slide-header h1 {
+            font-size: 48px;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .slide-header p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 300;
+        }
+
+        .slide-body {
+            flex: 1;
+            overflow-y: auto;
+            color: var(--text-light);
+            font-size: 20px;
+            line-height: 1.8;
+        }
+
+        .slide-body h3 {
+            font-size: 28px;
+            color: var(--accent);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .slide-body ul {
+            list-style: none;
+            margin-left: 30px;
+        }
+
+        .slide-body li {
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .slide-body li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .metric-box {
+            background: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 18px;
+        }
+
+        .metric-box strong {
+            color: var(--accent);
+            font-size: 22px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 18px;
+        }
+
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(46, 204, 113, 0.2);
+            color: var(--text-light);
+        }
+
+        table th {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        table tr:hover {
+            background: rgba(46, 204, 113, 0.05);
+        }
+
+        /* Call to action slide */
+        .slide.cta-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, #0d1f38 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slide.cta-slide .slide-content {
+            justify-content: center;
+        }
+
+        .cta-message {
+            font-size: 32px;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .cta-message strong {
+            color: var(--accent);
+            font-weight: 700;
+            display: block;
+            font-size: 36px;
+            margin: 15px 0;
+        }
+
+        .terms {
+            font-size: 20px;
+            color: var(--accent);
+            margin-top: 40px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(15, 20, 25, 0.95);
+            border-top: 2px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .slide-counter {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Keyboard shortcuts hint */
+        .keyboard-hint {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            z-index: 50;
+            text-align: right;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 20px;
+            }
+
+            .slide.title-slide h1 {
+                font-size: 48px;
+            }
+
+            .slide.title-slide h2 {
+                font-size: 28px;
+            }
+
+            .slide-header h1 {
+                font-size: 36px;
+            }
+
+            .slide-body {
+                font-size: 16px;
+            }
+
+            button {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .nav-bar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 20px;
+                gap: 10px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .nav-bar,
+            .keyboard-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="keyboard-hint">
+        ← → Arrow Keys or Click Buttons
+    </div>
+
+    <div class="presentation-wrapper">
+        <!-- SLIDE 1: TITLE -->
+        <div class="slide title-slide active" data-slide="1">
+            <div class="slide-content">
+                <h1>KIRMANI PARTNERS LP</h1>
+                <h2>The Uncorrelated Alpha Engine</h2>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: HOLY GRAIL -->
+        <div class="slide content-slide" data-slide="2">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1>THE HOLY GRAIL: 0.17 R-SQUARED</h1>
+                    <p>The single most important metric in modern portfolio construction</p>
+                </div>
+                <div class="slide-body">
+                    <div class="metric-box">
+                        <strong>83% Skill-Driven | 17% Market-Driven</strong><br>
+                        Genuine alpha, independent of market direction
+                    </div>
+                    <h3>Performance Validation</h3>
+                    <ul>
+                        <li><strong>+28.26%</strong> annual risk-adjusted alpha (statistically proven)</li>
+                        <li><strong>+260.96%</strong> cumulative return vs. +84.63% S&P 500</li>
+                        <li><strong>1.42 Sharpe Ratio</strong> (equivalent to S&P 500's 1.40)</li>
+                        <li><strong>Same risk-adjusted return as market, ZERO correlation</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: ALPHA ENGINE -->
+        <div class="slide content-slide" data-slide="3">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1>DECONSTRUCTING THE ALPHA ENGINE</h1>
+                    <p>A sophisticated four-pillar framework</p>
+                </div>
+                <div class="slide-body">
+                    <h3>Pillar 1: Equity Alpha Hunter (60-70%)</h3>
+                    <ul>
+                        <li>Micro-cap biotech & materials with 3-12 month catalyst visibility</li>
+                    </ul>
+                    <h3>Pillar 2: Macro Diversifier (15-25%)</h3>
+                    <ul>
+                        <li>Commodities, currencies, rates providing negative correlation</li>
+                    </ul>
+                    <h3>Pillar 3: Portable Alpha Hedge (5-10%)</h3>
+                    <ul>
+                        <li>Russell 2000 short + long specific ideas = pure alpha isolation</li>
+                    </ul>
+                    <h3>Pillar 4: Convexity Kicker (5-15%)</h3>
+                    <ul>
+                        <li>Long-dated OTM calls for asymmetric upside on secular themes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: PRICE OF NON-CORRELATION -->
+        <div class="slide content-slide" data-slide="4">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1>THE PRICE OF NON-CORRELATION</h1>
+                    <p>Reframing volatility as a feature, not a flaw</p>
+                </div>
+                <div class="slide-body">
+                    <h3>Portfolio Impact (5% Allocation to 60/40)</h3>
+                    <ul>
+                        <li>Expected Return: <strong>7.2% → 9.5%</strong> (+2.3pp)</li>
+                        <li>Portfolio Volatility: <strong>9.8% → 9.1%</strong> (-0.7pp)</li>
+                        <li>Sharpe Ratio: <strong>0.73 → 1.04</strong> (+0.31 improvement)</li>
+                    </ul>
+                    <div class="metric-box">
+                        <strong>Mathematical Proof:</strong><br>
+                        Adding high-volatility uncorrelated asset REDUCES total portfolio volatility while INCREASING returns
+                    </div>
+                    <p style="margin-top: 20px; color: var(--accent);">
+                        You are not taking more risk. You are exchanging market risk (beta) for genuine alpha (skill).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: COMPETITIVE POSITIONING -->
+        <div class="slide content-slide" data-slide="5">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1>COMPETITIVE POSITIONING & SCARCITY</h1>
+                    <p>Elite performance in global hedge fund context</p>
+                </div>
+                <div class="slide-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Kirmani Partners</th>
+                                <th>Percentile Rank</th>
+                                <th>Comparable Funds</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>3-Year Annualized Return</td>
+                                <td><strong style="color: var(--accent);">+53.34%</strong></td>
+                                <td>Top 0.1%</td>
+                                <td>Perceptive/Viking (CLOSED)</td>
+                            </tr>
+                            <tr>
+                                <td>Risk-Adjusted Alpha</td>
+                                <td><strong style="color: var(--accent);">+28.26%</strong></td>
+                                <td>Top 0.5%</td>
+                                <td>Elite tier only</td>
+                            </tr>
+                            <tr>
+                                <td>Sharpe Ratio</td>
+                                <td><strong style="color: var(--accent);">1.42</strong></td>
+                                <td>Top 10%</td>
+                                <td>Institutional standard</td>
+                            </tr>
+                            <tr>
+                                <td>R² (Uncorrelated)</td>
+                                <td><strong style="color: var(--accent);">0.17</strong></td>
+                                <td>Top 1%</td>
+                                <td>True diversifier</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="metric-box" style="margin-top: 30px;">
+                        <strong>🎯 UNIQUE OPPORTUNITY</strong><br>
+                        $422K AUM with $100K minimum entry. Comparable funds are all CLOSED to new investors.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: ADAPTABILITY & THEMES -->
+        <div class="slide content-slide" data-slide="6">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1>ADAPTABILITY & SECULAR THEMES</h1>
+                    <p>Evolution over dogma—proven across market cycles</p>
+                </div>
+                <div class="slide-body">
+                    <h3>Historical Adaptation</h3>
+                    <ul>
+                        <li><strong>2022 (Bear Market):</strong> Portfolio -8% vs. S&P -18% | Hedges worked</li>
+                        <li><strong>2023 (Recovery):</strong> Portfolio +30.7% capturing rotation</li>
+                        <li><strong>Monthly Win Rate: 77.8%</strong> across different market regimes</li>
+                    </ul>
+                    <h3>Five Secular Themes (2025-2030)</h3>
+                    <ul>
+                        <li><strong>AI Infrastructure (18%):</strong> Semiconductor foundational layer</li>
+                        <li><strong>Biotech Renaissance (22%):</strong> Gene therapy & CRISPR approvals</li>
+                        <li><strong>Digital Assets (5%):</strong> Bitcoin/Ethereum institutionalization</li>
+                        <li><strong>EM Leapfrogging (8%):</strong> Financial inclusion for 150M+ unbanked</li>
+                        <li><strong>Energy Transition (7%):</strong> Uranium + precious metals</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: POWER LAW & HEDGING -->
+        <div class="slide content-slide" data-slide="7">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1>POWER LAW, BARBELL & TAIL HEDGING</h1>
+                    <p>Three sophisticated frameworks in concert</p>
+                </div>
+                <div class="slide-body">
+                    <h3>Power Law Distribution</h3>
+                    <ul>
+                        <li>Top 10 positions (30% of portfolio) → 65% of alpha</li>
+                        <li>Bottom 50 positions (25%) → 5% of alpha</li>
+                    </ul>
+                    <h3>4-Layer Tail Hedging Framework</h3>
+                    <ul>
+                        <li><strong>1. Structural Hedges:</strong> Precious metals 7-10%</li>
+                        <li><strong>2. Volatility Convexity:</strong> VIX calls 1-2%</li>
+                        <li><strong>3. Sector-Specific Puts:</strong> XLK, XBI, IWM 2-3%</li>
+                        <li><strong>4. Barbell Positioning:</strong> Portfolio-wide asymmetry</li>
+                    </ul>
+                    <div class="metric-box">
+                        <strong>Downside Protection:</strong> -18-20% estimated loss vs. -35%+ unhedged
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: WHY INVEST -->
+        <div class="slide content-slide" data-slide="8">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1>WHY INVEST? THE COMPELLING CASE</h1>
+                    <p>Three-part thesis for allocators</p>
+                </div>
+                <div class="slide-body">
+                    <h3>1. PROVEN ALPHA</h3>
+                    <ul>
+                        <li>+28.26% annual (t-stat 2.8, p&lt;0.01 = statistically significant)</li>
+                    </ul>
+                    <h3>2. HOLY GRAIL R²</h3>
+                    <ul>
+                        <li>0.17 = 83% uncorrelated (genuine diversifier)</li>
+                    </ul>
+                    <h3>3. PRE-INSTITUTIONAL ENTRY</h3>
+                    <ul>
+                        <li>$422K AUM before gates close at $5-15M</li>
+                    </ul>
+                    <h3>Allocation Sizing by Investor Type</h3>
+                    <table style="margin-top: 20px;">
+                        <tr style="border-bottom: 1px solid rgba(46, 204, 113, 0.2);">
+                            <td>Family Office</td>
+                            <td style="color: var(--accent);">3-5%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(46, 204, 113, 0.2);">
+                            <td>UHNWI</td>
+                            <td style="color: var(--accent);">1-3%</td>
+                        </tr>
+                        <tr>
+                            <td>Endowment</td>
+                            <td style="color: var(--accent);">2-4%</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: CALL TO ACTION -->
+        <div class="slide cta-slide" data-slide="9">
+            <div class="slide-content">
+                <div class="cta-message">
+                    This is a satellite allocation to your <strong>"alpha bucket"</strong><br><br>
+                    A small 1-5% allocation reduces total portfolio volatility<br>
+                    while capturing 40-50% annual returns with zero correlation
+                </div>
+                <div style="font-size: 28px; line-height: 1.8; color: var(--text-light);">
+                    <strong style="color: var(--accent); display: block; font-size: 32px; margin-bottom: 20px;">We are buying true diversification</strong>
+                    <strong style="color: var(--accent); display: block; font-size: 32px; margin-bottom: 20px;">We are accessing an emerging manager before institutional scale</strong>
+                    <strong style="color: var(--accent); display: block; font-size: 32px;">We are investing in a precision alpha machine</strong>
+                </div>
+                <div class="terms">
+                    Minimum Investment: $100K | Lock-Up: 12 months | Redemptions: Quarterly
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="slide-counter">
+            <span id="current-slide">1</span> / <span id="total-slides">9</span>
+        </div>
+        <div class="nav-buttons">
+            <button id="prev-btn" onclick="previousSlide()">← Previous</button>
+            <button id="next-btn" onclick="nextSlide()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 9;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            
+            if (n > totalSlides) currentSlide = totalSlides;
+            if (n < 1) currentSlide = 1;
+            
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            const activeSlide = document.querySelector(`[data-slide="${currentSlide}"]`);
+            if (activeSlide) activeSlide.classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide;
+            
+            // Update button states
+            document.getElementById('prev-btn').disabled = currentSlide === 1;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides;
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+            if (e.key === 'Escape') document.fullscreenElement && document.exitFullscreen();
+        });
+
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
