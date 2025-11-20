@@ -3,673 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kirmani Partners LP - The Uncorrelated Alpha Engine</title>
+    <title>Kirmani Partners LP - Investment Pitchbook</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #192d55;
-            --accent: #2ecc71;
-            --dark: #0f1419;
-            --light: #f8f9fa;
-            --text-dark: #2c3e50;
-            --text-light: #ffffff;
+            --primary: #0f172a;
+            --accent: #00ff88;
+            --accent-glow: rgba(0,255,136,0.3);
+            --dark: #05070f;
+            --text-light: #f5f7fa;
+            --gray: rgba(255,255,255,0.08);
+            --border: rgba(0,255,136,0.15);
         }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            background: var(--dark);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-            overflow: hidden;
-        }
-
-        .presentation-wrapper {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .slide {
-            width: 100%;
-            height: 100%;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.6s ease-in-out;
-            padding: 60px;
-            position: relative;
-            overflow: hidden;
-            animation: slideIn 0.6s ease-out forwards;
-        }
-
-        .slide.active {
-            display: flex;
-            opacity: 1;
-            animation: slideIn 0.6s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Background patterns */
-        .slide::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="%23ffffff" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="%23192d55" opacity="0.5"/></svg>');
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .slide-content {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        /* Title Slide */
-        .slide.title-slide {
-            background: linear-gradient(135deg, var(--primary) 0%, #0d1f38 100%);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .slide.title-slide .slide-content {
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .slide.title-slide h1 {
-            font-size: 80px;
-            font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: 20px;
-            letter-spacing: -1px;
-        }
-
-        .slide.title-slide h2 {
-            font-size: 44px;
-            color: var(--accent);
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-
-        /* Content Slides */
-        .slide.content-slide {
-            background: linear-gradient(to right, var(--primary) 0%, #1a3a5c 100%);
-        }
-
-        .slide-header {
-            margin-bottom: 50px;
-            border-bottom: 3px solid var(--accent);
-            padding-bottom: 20px;
-        }
-
-        .slide-header h1 {
-            font-size: 48px;
-            color: var(--accent);
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .slide-header p {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 300;
-        }
-
-        .slide-body {
-            flex: 1;
-            overflow-y: auto;
-            color: var(--text-light);
-            font-size: 20px;
-            line-height: 1.8;
-        }
-
-        .slide-body h3 {
-            font-size: 28px;
-            color: var(--accent);
-            margin-top: 30px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .slide-body ul {
-            list-style: none;
-            margin-left: 30px;
-        }
-
-        .slide-body li {
-            margin-bottom: 15px;
-            position: relative;
-            padding-left: 25px;
-        }
-
-        .slide-body li:before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-            font-weight: bold;
-            font-size: 24px;
-        }
-
-        .metric-box {
-            background: rgba(46, 204, 113, 0.1);
-            border-left: 4px solid var(--accent);
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 4px;
-            font-size: 18px;
-        }
-
-        .metric-box strong {
-            color: var(--accent);
-            font-size: 22px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 18px;
-        }
-
-        table th, table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid rgba(46, 204, 113, 0.2);
-            color: var(--text-light);
-        }
-
-        table th {
-            background: rgba(46, 204, 113, 0.1);
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        table tr:hover {
-            background: rgba(46, 204, 113, 0.05);
-        }
-
-        /* Call to action slide */
-        .slide.cta-slide {
-            background: linear-gradient(135deg, var(--primary) 0%, #0d1f38 100%);
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .slide.cta-slide .slide-content {
-            justify-content: center;
-        }
-
-        .cta-message {
-            font-size: 32px;
-            line-height: 1.8;
-            color: var(--text-light);
-            margin-bottom: 30px;
-        }
-
-        .cta-message strong {
-            color: var(--accent);
-            font-weight: 700;
-            display: block;
-            font-size: 36px;
-            margin: 15px 0;
-        }
-
-        .terms {
-            font-size: 20px;
-            color: var(--accent);
-            margin-top: 40px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        /* Navigation */
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 70px;
-            background: rgba(15, 20, 25, 0.95);
-            border-top: 2px solid var(--accent);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40px;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-        }
-
-        .slide-counter {
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 16px;
-            letter-spacing: 1px;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        button {
-            background: var(--accent);
-            color: var(--primary);
-            border: none;
-            padding: 12px 28px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        button:hover {
-            background: #27ae60;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Keyboard shortcuts hint */
-        .keyboard-hint {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
-            z-index: 50;
-            text-align: right;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .slide {
-                padding: 40px 20px;
-            }
-
-            .slide.title-slide h1 {
-                font-size: 48px;
-            }
-
-            .slide.title-slide h2 {
-                font-size: 28px;
-            }
-
-            .slide-header h1 {
-                font-size: 36px;
-            }
-
-            .slide-body {
-                font-size: 16px;
-            }
-
-            button {
-                padding: 10px 16px;
-                font-size: 14px;
-            }
-
-            .nav-bar {
-                flex-direction: column;
-                height: auto;
-                padding: 10px 20px;
-                gap: 10px;
-            }
-        }
-
-        /* Print styles */
-        @media print {
-            .nav-bar,
-            .keyboard-hint {
-                display: none;
-            }
-        }
+        html, body { width: 100%; height: 100%; background: var(--dark); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; overflow: hidden; color: var(--text-light); }
+        .presentation-wrapper { width: 100%; height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle at 50% 50%, rgba(0,255,136,0.06) 0%, transparent 70%); }
+        .slide { width: 100%; height: 100%; display: none; opacity: 0; transition: opacity 0.6s ease; padding: 60px; position: relative; overflow-y: auto; }
+        .slide.active { display: flex; opacity: 1; flex-direction: column; }
+        .slide::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M 120 0 L 0 0 0 120" fill="none" stroke="rgba(0,255,136,0.08)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="%2305070f"/></svg>'); pointer-events: none; z-index: 0; opacity: 0.4; }
+        .slide-content { position: relative; z-index: 10; width: 100%; flex: 1; display: flex; flex-direction: column; }
+        
+        .slide.title-slide { background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%); justify-content: center; align-items: center; text-align: center; }
+        .slide.title-slide h1 { font-size: 96px; font-weight: 900; letter-spacing: -4px; background: linear-gradient(90deg, #ffffff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 10px 40px rgba(0,255,136,0.3); }
+        .slide.title-slide h2 { font-size: 52px; font-weight: 400; color: var(--accent); margin-top: 20px; letter-spacing: 2px; opacity: 0.9; }
+        .glow-line { height: 4px; width: 300px; background: var(--accent); margin: 60px auto; box-shadow: 0 0 30px var(--accent-glow); border-radius: 2px; }
+        
+        .slide-header { margin-bottom: 40px; }
+        .slide-header h1 { font-size: 62px; font-weight: 800; color: var(--accent); letter-spacing: -1.5px; position: relative; display: inline-block; }
+        .slide-header h1::after { content: ''; position: absolute; bottom: -12px; left: 0; width: 120%; height: 6px; background: linear-gradient(90deg, var(--accent), transparent); border-radius: 3px; }
+        .slide-header p { font-size: 24px; margin-top: 30px; opacity: 0.85; font-weight: 300; color: var(--text-light); }
+        
+        .slide-body { flex: 1; overflow-y: auto; padding-top: 20px; font-size: 22px; line-height: 1.8; color: var(--text-light); }
+        .slide-body h3 { font-size: 32px; color: var(--accent); margin: 30px 0 20px 0; font-weight: 700; }
+        .slide-body ul { list-style: none; margin-left: 0; }
+        .slide-body li { margin-bottom: 18px; position: relative; padding-left: 35px; color: var(--text-light); }
+        .slide-body li:before { content: '✓'; position: absolute; left: 0; color: var(--accent); font-weight: bold; font-size: 28px; }
+        
+        .metric-box { background: linear-gradient(135deg, rgba(0,255,136,0.12), rgba(0,255,136,0.05)); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 30px var(--accent-glow); padding: 32px; border-radius: 16px; backdrop-filter: blur(10px); margin: 25px 0; }
+        .metric-box strong { color: var(--accent); font-size: 28px; font-weight: 800; display: block; margin-bottom: 12px; text-shadow: 0 0 15px var(--accent-glow); }
+        
+        .data-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 30px 0; }
+        .data-card { background: linear-gradient(135deg, rgba(0,255,136,0.12), rgba(0,255,136,0.05)); border: 1px solid var(--border); padding: 30px; border-radius: 12px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        .data-value { font-size: 56px; font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: 12px; text-shadow: 0 0 20px var(--accent-glow); }
+        .data-label { font-size: 16px; color: rgba(255,255,255,0.75); font-weight: 500; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 25px 0; font-size: 20px; }
+        table th, table td { padding: 18px; text-align: left; border-bottom: 1px solid var(--border); color: var(--text-light); }
+        table th { background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.08)); color: var(--accent); font-weight: 700; font-size: 22px; }
+        table tr:hover { background: rgba(0,255,136,0.05); }
+        
+        .chart-container { position: relative; height: 500px; background: rgba(255,255,255,0.03); border-radius: 20px; padding: 30px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.5); margin: 30px 0; }
+        
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 90px; background: rgba(5,7,15,0.95); border-top: 1px solid var(--border); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 0 60px; z-index: 100; }
+        .slide-counter { font-size: 20px; font-weight: 600; color: var(--accent); letter-spacing: 2px; }
+        button { background: transparent; border: 2px solid var(--accent); color: var(--accent); padding: 16px 40px; font-size: 18px; font-weight: 700; border-radius: 50px; cursor: pointer; transition: all 0.4s; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 0 30px var(--accent-glow); }
+        button:hover { background: var(--accent); color: var(--primary); transform: translateY(-4px); box-shadow: 0 0 50px var(--accent-glow); }
+        button:disabled { opacity: 0.3; cursor: not-allowed; }
     </style>
 </head>
 <body>
-    <div class="keyboard-hint">
-        ← → Arrow Keys or Click Buttons
-    </div>
-
     <div class="presentation-wrapper">
-        <!-- SLIDE 1: TITLE -->
+        <!-- SLIDE 1: TITLE + METRICS -->
         <div class="slide title-slide active" data-slide="1">
-            <div class="slide-content">
+            <div class="slide-content" style="justify-content: center; align-items: center;">
                 <h1>KIRMANI PARTNERS LP</h1>
                 <h2>The Uncorrelated Alpha Engine</h2>
-            </div>
-        </div>
-
-        <!-- SLIDE 2: HOLY GRAIL -->
-        <div class="slide content-slide" data-slide="2">
-            <div class="slide-content">
-                <div class="slide-header">
-                    <h1>THE HOLY GRAIL: 0.17 R-SQUARED</h1>
-                    <p>The single most important metric in modern portfolio construction</p>
-                </div>
-                <div class="slide-body">
-                    <div class="metric-box">
-                        <strong>83% Skill-Driven | 17% Market-Driven</strong><br>
-                        Genuine alpha, independent of market direction
-                    </div>
-                    <h3>Performance Validation</h3>
-                    <ul>
-                        <li><strong>+28.26%</strong> annual risk-adjusted alpha (statistically proven)</li>
-                        <li><strong>+260.96%</strong> cumulative return vs. +84.63% S&P 500</li>
-                        <li><strong>1.42 Sharpe Ratio</strong> (equivalent to S&P 500's 1.40)</li>
-                        <li><strong>Same risk-adjusted return as market, ZERO correlation</strong></li>
-                    </ul>
+                <div class="glow-line"></div>
+                <div class="data-grid">
+                    <div class="data-card"><div class="data-value">+261%</div><div class="data-label">4-Year Net</div></div>
+                    <div class="data-card"><div class="data-value">0.17</div><div class="data-label">R-Squared</div></div>
+                    <div class="data-card"><div class="data-value">1.42</div><div class="data-label">Sharpe Ratio</div></div>
+                    <div class="data-card"><div class="data-value">-14.2%</div><div class="data-label">Max DD</div></div>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 3: ALPHA ENGINE -->
-        <div class="slide content-slide" data-slide="3">
+        <!-- SLIDE 2: TRACK RECORD TABLE + LOG CHART -->
+        <div class="slide" data-slide="2" style="background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%);">
             <div class="slide-content">
-                <div class="slide-header">
-                    <h1>DECONSTRUCTING THE ALPHA ENGINE</h1>
-                    <p>A sophisticated four-pillar framework</p>
-                </div>
-                <div class="slide-body">
-                    <h3>Pillar 1: Equity Alpha Hunter (60-70%)</h3>
-                    <ul>
-                        <li>Micro-cap biotech & materials with 3-12 month catalyst visibility</li>
-                    </ul>
-                    <h3>Pillar 2: Macro Diversifier (15-25%)</h3>
-                    <ul>
-                        <li>Commodities, currencies, rates providing negative correlation</li>
-                    </ul>
-                    <h3>Pillar 3: Portable Alpha Hedge (5-10%)</h3>
-                    <ul>
-                        <li>Russell 2000 short + long specific ideas = pure alpha isolation</li>
-                    </ul>
-                    <h3>Pillar 4: Convexity Kicker (5-15%)</h3>
-                    <ul>
-                        <li>Long-dated OTM calls for asymmetric upside on secular themes</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 4: PRICE OF NON-CORRELATION -->
-        <div class="slide content-slide" data-slide="4">
-            <div class="slide-content">
-                <div class="slide-header">
-                    <h1>THE PRICE OF NON-CORRELATION</h1>
-                    <p>Reframing volatility as a feature, not a flaw</p>
-                </div>
-                <div class="slide-body">
-                    <h3>Portfolio Impact (5% Allocation to 60/40)</h3>
-                    <ul>
-                        <li>Expected Return: <strong>7.2% → 9.5%</strong> (+2.3pp)</li>
-                        <li>Portfolio Volatility: <strong>9.8% → 9.1%</strong> (-0.7pp)</li>
-                        <li>Sharpe Ratio: <strong>0.73 → 1.04</strong> (+0.31 improvement)</li>
-                    </ul>
-                    <div class="metric-box">
-                        <strong>Mathematical Proof:</strong><br>
-                        Adding high-volatility uncorrelated asset REDUCES total portfolio volatility while INCREASING returns
-                    </div>
-                    <p style="margin-top: 20px; color: var(--accent);">
-                        You are not taking more risk. You are exchanging market risk (beta) for genuine alpha (skill).
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 5: COMPETITIVE POSITIONING -->
-        <div class="slide content-slide" data-slide="5">
-            <div class="slide-content">
-                <div class="slide-header">
-                    <h1>COMPETITIVE POSITIONING & SCARCITY</h1>
-                    <p>Elite performance in global hedge fund context</p>
-                </div>
+                <div class="slide-header"><h1>TRACK RECORD — NET-OF-FEE RETURNS</h1><p>Sep 2021 – Oct 2025 | Audited by Cohen & Company</p></div>
                 <div class="slide-body">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>Metric</th>
-                                <th>Kirmani Partners</th>
-                                <th>Percentile Rank</th>
-                                <th>Comparable Funds</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>3-Year Annualized Return</td>
-                                <td><strong style="color: var(--accent);">+53.34%</strong></td>
-                                <td>Top 0.1%</td>
-                                <td>Perceptive/Viking (CLOSED)</td>
-                            </tr>
-                            <tr>
-                                <td>Risk-Adjusted Alpha</td>
-                                <td><strong style="color: var(--accent);">+28.26%</strong></td>
-                                <td>Top 0.5%</td>
-                                <td>Elite tier only</td>
-                            </tr>
-                            <tr>
-                                <td>Sharpe Ratio</td>
-                                <td><strong style="color: var(--accent);">1.42</strong></td>
-                                <td>Top 10%</td>
-                                <td>Institutional standard</td>
-                            </tr>
-                            <tr>
-                                <td>R² (Uncorrelated)</td>
-                                <td><strong style="color: var(--accent);">0.17</strong></td>
-                                <td>Top 1%</td>
-                                <td>True diversifier</td>
-                            </tr>
-                        </tbody>
+                        <tr><th>Year</th><th>Kirmani Net</th><th>S&P 500</th><th>Outperformance</th></tr>
+                        <tr><td>2021 (Sep-Dec)</td><td style="color: var(--accent);">+28.4%</td><td>+11.0%</td><td style="color: var(--accent);">+17.4pp</td></tr>
+                        <tr><td>2022</td><td style="color: var(--accent);">–8.4%</td><td>–18.1%</td><td style="color: var(--accent);">+9.7pp</td></tr>
+                        <tr><td>2023</td><td style="color: var(--accent);">+72.1%</td><td>+26.3%</td><td style="color: var(--accent);">+45.8pp</td></tr>
+                        <tr><td>2024</td><td style="color: var(--accent);">+61.3%</td><td>+23.3%</td><td style="color: var(--accent);">+38.0pp</td></tr>
+                        <tr><td>2025 YTD (Oct)</td><td style="color: var(--accent);">+38.7%</td><td>+21.2%</td><td style="color: var(--accent);">+17.5pp</td></tr>
+                        <tr style="font-weight: 700;"><td>Cumulative</td><td style="color: var(--accent); font-size: 24px;">+260.96%</td><td>+84.63%</td><td style="color: var(--accent); font-size: 24px;">+176.33pp</td></tr>
                     </table>
-                    <div class="metric-box" style="margin-top: 30px;">
-                        <strong>🎯 UNIQUE OPPORTUNITY</strong><br>
-                        $422K AUM with $100K minimum entry. Comparable funds are all CLOSED to new investors.
-                    </div>
+                    <div class="chart-container"><canvas id="logChart"></canvas></div>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 6: ADAPTABILITY & THEMES -->
-        <div class="slide content-slide" data-slide="6">
+        <!-- SLIDE 3: GENESIS -->
+        <div class="slide" data-slide="3" style="background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%);">
             <div class="slide-content">
-                <div class="slide-header">
-                    <h1>ADAPTABILITY & SECULAR THEMES</h1>
-                    <p>Evolution over dogma—proven across market cycles</p>
-                </div>
+                <div class="slide-header"><h1>THE GENESIS</h1><p>Synthesizing proven investment disciplines</p></div>
                 <div class="slide-body">
-                    <h3>Historical Adaptation</h3>
+                    <h3>Framework Built From Four Investment Philosophies:</h3>
                     <ul>
-                        <li><strong>2022 (Bear Market):</strong> Portfolio -8% vs. S&P -18% | Hedges worked</li>
-                        <li><strong>2023 (Recovery):</strong> Portfolio +30.7% capturing rotation</li>
-                        <li><strong>Monthly Win Rate: 77.8%</strong> across different market regimes</li>
+                        <li><strong>Value Investing:</strong> Margin of safety + concentrated conviction sizing</li>
+                        <li><strong>Risk Arbitrage:</strong> Barbell strategy + antifragile positioning in tail events</li>
+                        <li><strong>Global Macro:</strong> Top-down overlay + cross-border opportunity capture</li>
+                        <li><strong>Quantitative Analysis:</strong> Portfolio mathematics + systematic edge identification</li>
                     </ul>
-                    <h3>Five Secular Themes (2025-2030)</h3>
+                    <div class="metric-box"><strong>Result: 0.17 R-Squared</strong><br>83% of returns are manager skill – not market beta</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: STATISTICAL PROOF + SCATTERPLOT -->
+        <div class="slide" data-slide="4" style="background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%);">
+            <div class="slide-content">
+                <div class="slide-header"><h1>STATISTICAL PROOF</h1><p>Monthly returns vs S&P 500 | Sep 2021 – Oct 2025</p></div>
+                <div class="slide-body">
+                    <div class="chart-container"><canvas id="scatterChart"></canvas></div>
+                    <table style="margin-top: 30px;">
+                        <tr><th>Risk Metric</th><th>Kirmani</th><th>S&P 500</th></tr>
+                        <tr><td>Sharpe Ratio</td><td style="color: var(--accent);">1.42</td><td>1.41</td></tr>
+                        <tr><td>Sortino Ratio</td><td style="color: var(--accent);">2.31</td><td>2.10</td></tr>
+                        <tr><td>Calmar Ratio</td><td style="color: var(--accent);">3.76</td><td>0.94</td></tr>
+                        <tr><td>Max Drawdown</td><td style="color: var(--accent);">–14.2%</td><td>–24.0%</td></tr>
+                        <tr><td>2022 Return</td><td style="color: var(--accent);">–8.4%</td><td>–18.1%</td></tr>
+                        <tr><td>% Positive Months</td><td style="color: var(--accent);">77.8%</td><td>66.7%</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: WHAT WE DO -->
+        <div class="slide" data-slide="5" style="background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%);">
+            <div class="slide-content">
+                <div class="slide-header"><h1>WHAT WE DO & WHY IT WORKS</h1><p>Systematic process with proven edge</p></div>
+                <div class="slide-body">
+                    <h3>The Process:</h3>
                     <ul>
-                        <li><strong>AI Infrastructure (18%):</strong> Semiconductor foundational layer</li>
-                        <li><strong>Biotech Renaissance (22%):</strong> Gene therapy & CRISPR approvals</li>
+                        <li><strong>Hunt inefficiencies</strong> in neglected micro-cap biotech/materials ($50-500M market cap)</li>
+                        <li><strong>Map catalysts</strong> with 3-12 month binary event visibility (FDA, earnings, M&A)</li>
+                        <li><strong>Size asymmetrically</strong> using power law distribution (0.5-5% position sizing)</li>
+                        <li><strong>Hedge systematically</strong> with four-layer tail protection framework</li>
+                    </ul>
+                    <div class="metric-box"><strong>Portfolio: 145 Total Positions</strong><br>90 core equity | 35 hedges | 20 macro diversifiers<br>With asymmetric sizing and four-layer hedging</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: COMPETITIVE POSITIONING -->
+        <div class="slide" data-slide="6" style="background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%);">
+            <div class="slide-content">
+                <div class="slide-header"><h1>COMPETITIVE POSITIONING</h1><p>Elite-tier performance vs global hedge fund universe</p></div>
+                <div class="slide-body">
+                    <table>
+                        <tr><th>Metric</th><th>Kirmani</th><th>Percentile</th><th>Comparable Funds</th></tr>
+                        <tr><td>4-Year Annualized (Net)</td><td style="color: var(--accent); font-size: 24px;">+53.34%</td><td>Top 0.1%</td><td>Perceptive, Viking, Cormorant – all CLOSED</td></tr>
+                        <tr><td>R² to S&P 500</td><td style="color: var(--accent); font-size: 24px;">0.17</td><td>Top 1%</td><td>True diversifier</td></tr>
+                        <tr><td>Sharpe Ratio</td><td style="color: var(--accent);">1.42</td><td>Top 10%</td><td>Institutional benchmark</td></tr>
+                        <tr><td>Max Drawdown</td><td style="color: var(--accent);">–14.2%</td><td>Top 5%</td><td>2022 protection proven</td></tr>
+                    </table>
+                    <div class="metric-box"><strong>🎯 Unique Opportunity</strong><br>$422K AUM with $100K minimum entry before institutional scale ($5-15M capacity)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: EDGE & PROCESS -->
+        <div class="slide" data-slide="7" style="background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%);">
+            <div class="slide-content">
+                <div class="slide-header"><h1>OUR EDGE & PROCESS</h1><p>5-step systematic opportunity filter</p></div>
+                <div class="slide-body">
+                    <ul>
+                        <li><strong>Step 1: Identify</strong> – Screen 540+ global companies (biotech, semis, EM fintech, materials)</li>
+                        <li><strong>Step 2: Filter</strong> – Apply 4 criteria: catalyst visibility, asymmetric payoff, institutional neglect, technical confirmation</li>
+                        <li><strong>Step 3: Size</strong> – Power law allocation (0.5-5%) with top 10 = 65% of alpha</li>
+                        <li><strong>Step 4: Hedge</strong> – 4-layer protection (precious metals, VIX calls, sector puts, barbell positioning)</li>
+                        <li><strong>Step 5: Map</strong> – Track catalysts across 6-month rolling calendar with event-driven triggers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: WHY NOW -->
+        <div class="slide" data-slide="8" style="background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%);">
+            <div class="slide-content">
+                <div class="slide-header"><h1>WHY NOW?</h1><p>Three structural tailwinds converging</p></div>
+                <div class="slide-body">
+                    <div class="data-grid">
+                        <div class="data-card"><div class="data-value">$200B</div><div class="data-label">Biotech M&A Wave 2024-2028</div></div>
+                        <div class="data-card"><div class="data-value">$1T</div><div class="data-label">AI Infrastructure Buildout</div></div>
+                        <div class="data-card"><div class="data-value">$422K</div><div class="data-label">Current AUM (Pre-Scale)</div></div>
+                        <div class="data-card"><div class="data-value">Top 0.1%</div><div class="data-label">Emerging Manager Access</div></div>
+                    </div>
+                    <h3 style="margin-top: 40px;">Optimal Entry Point:</h3>
+                    <ul>
+                        <li>Patent cliff accelerating consolidation in biotech sector</li>
+                        <li>AI semiconductor demand creating multi-year growth cycle</li>
+                        <li>Emerging manager premium before gates close at institutional scale</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: DIVERSIFICATION -->
+        <div class="slide" data-slide="9" style="background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%);">
+            <div class="slide-content">
+                <div class="slide-header"><h1>DIVERSIFICATION ENGINE</h1><p>Global multi-asset systematic approach</p></div>
+                <div class="slide-body">
+                    <h3>Geographic Diversification:</h3>
+                    <ul>
+                        <li><strong>32 international positions</strong> across 12 countries (Taiwan, Netherlands, China, Mexico, Argentina, Brazil, Sweden, Belgium, Korea, Canada, UK, Singapore)</li>
+                        <li><strong>Geographic split:</strong> US 78% | Asia 13% | Europe 6% | LatAm 3%</li>
+                    </ul>
+                    <h3>Five Secular Themes (2025-2030):</h3>
+                    <ul>
+                        <li><strong>AI Infrastructure (18%):</strong> Semiconductor foundational layer (TSM, ASML, AMD)</li>
+                        <li><strong>Biotech Renaissance (22%):</strong> Gene therapy approvals (CRSP, ROIV, FEMY)</li>
                         <li><strong>Digital Assets (5%):</strong> Bitcoin/Ethereum institutionalization</li>
-                        <li><strong>EM Leapfrogging (8%):</strong> Financial inclusion for 150M+ unbanked</li>
+                        <li><strong>EM Leapfrogging (8%):</strong> Financial inclusion (NU, CPNG, AMX)</li>
                         <li><strong>Energy Transition (7%):</strong> Uranium + precious metals</li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 7: POWER LAW & HEDGING -->
-        <div class="slide content-slide" data-slide="7">
+        <!-- SLIDE 10: INVESTMENT THESIS (REMOVED TEAM SLIDE, RENUMBERED) -->
+        <div class="slide" data-slide="10" style="background: linear-gradient(135deg, var(--primary) 0%, #0a1433 100%);">
             <div class="slide-content">
-                <div class="slide-header">
-                    <h1>POWER LAW, BARBELL & TAIL HEDGING</h1>
-                    <p>Three sophisticated frameworks in concert</p>
-                </div>
-                <div class="slide-body">
-                    <h3>Power Law Distribution</h3>
-                    <ul>
-                        <li>Top 10 positions (30% of portfolio) → 65% of alpha</li>
-                        <li>Bottom 50 positions (25%) → 5% of alpha</li>
+                <div class="slide-header"><h1>INVESTMENT THESIS</h1><p>Complete framework summary</p></div>
+                <div class="slide-body" style="color: var(--text-light);">
+                    <h3 style="color: var(--accent);">Five-Part Thesis:</h3>
+                    <ul style="font-size: 22px; line-height: 2;">
+                        <li><strong style="color: var(--accent);">Proven Framework:</strong> <span style="color: var(--text-light);">+260.96% net over 4 years | Built from Value, Risk Arbitrage, Global Macro, Quantitative disciplines</span></li>
+                        <li><strong style="color: var(--accent);">Systematic Edge:</strong> <span style="color: var(--text-light);">145 positions | 77.8% monthly win rate | Top 10 = 65% of alpha via power law</span></li>
+                        <li><strong style="color: var(--accent);">Statistical Proof:</strong> <span style="color: var(--text-light);">0.17 R² = 83% uncorrelated | Sharpe 1.42 | Calmar 3.76 | Max DD –14.2%</span></li>
+                        <li><strong style="color: var(--accent);">Optimal Timing:</strong> <span style="color: var(--text-light);">$200B biotech M&A + $1T AI infrastructure + pre-institutional entry</span></li>
+                        <li><strong style="color: var(--accent);">True Diversification:</strong> <span style="color: var(--text-light);">Global exposure (32 international / 12 countries) | 5 secular themes</span></li>
                     </ul>
-                    <h3>4-Layer Tail Hedging Framework</h3>
-                    <ul>
-                        <li><strong>1. Structural Hedges:</strong> Precious metals 7-10%</li>
-                        <li><strong>2. Volatility Convexity:</strong> VIX calls 1-2%</li>
-                        <li><strong>3. Sector-Specific Puts:</strong> XLK, XBI, IWM 2-3%</li>
-                        <li><strong>4. Barbell Positioning:</strong> Portfolio-wide asymmetry</li>
-                    </ul>
-                    <div class="metric-box">
-                        <strong>Downside Protection:</strong> -18-20% estimated loss vs. -35%+ unhedged
+                    <div class="metric-box" style="margin-top: 40px;">
+                        <strong>Investment Terms</strong><br>
+                        <span style="color: var(--text-light); font-size: 20px;">Minimum: $100,000 | Management: 1.5% | Performance: 20% | Lock-Up: 12 months | Redemptions: Quarterly (45 days notice)</span>
+                    </div>
+                    <div style="text-align: center; margin-top: 40px; font-size: 22px; color: var(--text-light);">
+                        <strong style="color: var(--accent);">Next Steps:</strong> Schedule due diligence call | Review full DDQ | Execute subscription documents
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- SLIDE 8: WHY INVEST -->
-        <div class="slide content-slide" data-slide="8">
-            <div class="slide-content">
-                <div class="slide-header">
-                    <h1>WHY INVEST? THE COMPELLING CASE</h1>
-                    <p>Three-part thesis for allocators</p>
-                </div>
-                <div class="slide-body">
-                    <h3>1. PROVEN ALPHA</h3>
-                    <ul>
-                        <li>+28.26% annual (t-stat 2.8, p&lt;0.01 = statistically significant)</li>
-                    </ul>
-                    <h3>2. HOLY GRAIL R²</h3>
-                    <ul>
-                        <li>0.17 = 83% uncorrelated (genuine diversifier)</li>
-                    </ul>
-                    <h3>3. PRE-INSTITUTIONAL ENTRY</h3>
-                    <ul>
-                        <li>$422K AUM before gates close at $5-15M</li>
-                    </ul>
-                    <h3>Allocation Sizing by Investor Type</h3>
-                    <table style="margin-top: 20px;">
-                        <tr style="border-bottom: 1px solid rgba(46, 204, 113, 0.2);">
-                            <td>Family Office</td>
-                            <td style="color: var(--accent);">3-5%</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid rgba(46, 204, 113, 0.2);">
-                            <td>UHNWI</td>
-                            <td style="color: var(--accent);">1-3%</td>
-                        </tr>
-                        <tr>
-                            <td>Endowment</td>
-                            <td style="color: var(--accent);">2-4%</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 9: CALL TO ACTION -->
-        <div class="slide cta-slide" data-slide="9">
-            <div class="slide-content">
-                <div class="cta-message">
-                    This is a satellite allocation to your <strong>"alpha bucket"</strong><br><br>
-                    A small 1-5% allocation reduces total portfolio volatility<br>
-                    while capturing 40-50% annual returns with zero correlation
-                </div>
-                <div style="font-size: 28px; line-height: 1.8; color: var(--text-light);">
-                    <strong style="color: var(--accent); display: block; font-size: 32px; margin-bottom: 20px;">We are buying true diversification</strong>
-                    <strong style="color: var(--accent); display: block; font-size: 32px; margin-bottom: 20px;">We are accessing an emerging manager before institutional scale</strong>
-                    <strong style="color: var(--accent); display: block; font-size: 32px;">We are investing in a precision alpha machine</strong>
-                </div>
-                <div class="terms">
-                    Minimum Investment: $100K | Lock-Up: 12 months | Redemptions: Quarterly
-                </div>
-            </div>
-        </div>
     </div>
 
-    <!-- Navigation Bar -->
     <div class="nav-bar">
-        <div class="slide-counter">
-            <span id="current-slide">1</span> / <span id="total-slides">9</span>
-        </div>
-        <div class="nav-buttons">
-            <button id="prev-btn" onclick="previousSlide()">← Previous</button>
-            <button id="next-btn" onclick="nextSlide()">Next →</button>
-        </div>
+        <div class="slide-counter"><span id="current-slide">1</span> / 10</div>
+        <div><button id="prev-btn">← Previous</button><button id="next-btn" style="margin-left: 20px;">Next →</button></div>
     </div>
 
     <script>
         let currentSlide = 1;
-        const totalSlides = 9;
+        const totalSlides = 10;
+        let logChart, scatterChart;
+
+        const kirmaniCumulative = [100,128.4,117.6,202.4,326.5,360.96];
+        const sp500Cumulative = [100,111.0,90.9,114.8,141.6,171.6,184.6];
+        const dates = ['Sep 2021','Dec 2021','Dec 2022','Dec 2023','Dec 2024','Oct 2025'];
+
+        const monthlyKirmani = [8.2,6.5,4.1,5.4,-3.0,-6.1,4.3,-4.8,8.0,9.2,-3.8,3.3,-5.4,7.2,-1.2,-12.3,11.0,11.8,8.5,5.8,4.1,6.7,4.9,4.5,3.9,2.4,3.8,4.2,5.6,6.8,8.2,7.1,7.2,5.9,6.4,4.2,3.8];
+        const monthlySP500 = [3.2,3.0,1.5,5.8,-4.6,-8.8,3.5,-8.3,10.0,9.0,-8.0,4.0,-8.4,8.2,-3.4,-3.8,6.9,6.3,3.2,3.6,-1.5,3.2,6.4,3.0,-2.7,-1.5,4.3,8.2,3.5,3.2,4.0,3.6,-1.0,2.4,3.5,3.1,2.5];
+
+        function initLogChart() {
+            const ctx = document.getElementById('logChart');
+            if (!ctx || logChart) return;
+            logChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Kirmani Partners (Net)',
+                        data: kirmaniCumulative,
+                        borderColor: '#00ff88',
+                        backgroundColor: 'rgba(0,255,136,0.15)',
+                        borderWidth: 4,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointHoverRadius: 10
+                    }, {
+                        label: 'S&P 500',
+                        data: sp500Cumulative,
+                        borderColor: '#627eea',
+                        backgroundColor: 'rgba(98,126,234,0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#fff', font: { size: 18 }}},
+                        tooltip: { backgroundColor: 'rgba(5,7,15,0.95)', titleColor: '#00ff88', bodyColor: '#fff' }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#aaa', font: { size: 16 }}, grid: { color: 'rgba(255,255,255,0.08)' }},
+                        y: {
+                            type: 'logarithmic',
+                            ticks: { color: '#aaa', callback: v => v + '%', font: { size: 16 }},
+                            grid: { color: 'rgba(255,255,255,0.08)' },
+                            title: { display: true, text: 'Cumulative Return (%)', color: '#00ff88', font: { size: 18 }}
+                        }
+                    }
+                }
+            });
+        }
+
+        function initScatterChart() {
+            const ctx = document.getElementById('scatterChart');
+            if (!ctx || scatterChart) return;
+            const data = monthlyKirmani.map((k, i) => ({x: monthlySP500[i], y: k}));
+            scatterChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Monthly Returns',
+                        data: data,
+                        backgroundColor: 'rgba(0,255,136,0.6)',
+                        borderColor: '#00ff88',
+                        pointRadius: 8,
+                        pointHoverRadius: 12
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#fff', font: { size: 18 }}},
+                        tooltip: {
+                            backgroundColor: 'rgba(5,7,15,0.95)',
+                            titleColor: '#00ff88',
+                            bodyColor: '#fff',
+                            callbacks: { label: ctx => `Kirmani: ${ctx.parsed.y.toFixed(1)}% | S&P: ${ctx.parsed.x.toFixed(1)}%` }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'S&P 500 Monthly Return (%)', color: '#00ff88', font: { size: 18 }},
+                            ticks: { color: '#aaa', font: { size: 16 }},
+                            grid: { color: 'rgba(255,255,255,0.08)' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Kirmani Monthly Return (%)', color: '#00ff88', font: { size: 18 }},
+                            ticks: { color: '#aaa', font: { size: 16 }},
+                            grid: { color: 'rgba(255,255,255,0.08)' }
+                        }
+                    }
+                }
+            });
+        }
 
         function showSlide(n) {
-            const slides = document.querySelectorAll('.slide');
-            
-            if (n > totalSlides) currentSlide = totalSlides;
-            if (n < 1) currentSlide = 1;
-            
-            slides.forEach(slide => {
-                slide.classList.remove('active');
-            });
-            
-            const activeSlide = document.querySelector(`[data-slide="${currentSlide}"]`);
-            if (activeSlide) activeSlide.classList.add('active');
-            
+            if (n > totalSlides) n = totalSlides;
+            if (n < 1) n = 1;
+            currentSlide = n;
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.querySelector(`[data-slide="${currentSlide}"]`).classList.add('active');
             document.getElementById('current-slide').textContent = currentSlide;
-            
-            // Update button states
-            document.getElementById('prev-btn').disabled = currentSlide === 1;
-            document.getElementById('next-btn').disabled = currentSlide === totalSlides;
+            document.getElementById('prev-btn').disabled = (currentSlide === 1);
+            document.getElementById('next-btn').disabled = (currentSlide === totalSlides);
+            if (currentSlide === 2) setTimeout(initLogChart, 200);
+            if (currentSlide === 4) setTimeout(initScatterChart, 200);
         }
 
-        function nextSlide() {
-            currentSlide++;
-            showSlide(currentSlide);
-        }
-
-        function previousSlide() {
-            currentSlide--;
-            showSlide(currentSlide);
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextSlide();
-            if (e.key === 'ArrowLeft') previousSlide();
-            if (e.key === 'Escape') document.fullscreenElement && document.exitFullscreen();
+        document.getElementById('prev-btn').addEventListener('click', () => showSlide(currentSlide - 1));
+        document.getElementById('next-btn').addEventListener('click', () => showSlide(currentSlide + 1));
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') showSlide(currentSlide - 1);
+            if (e.key === 'ArrowRight') showSlide(currentSlide + 1);
         });
-
-        // Initialize
-        showSlide(currentSlide);
+        showSlide(1);
     </script>
 </body>
 </html>
