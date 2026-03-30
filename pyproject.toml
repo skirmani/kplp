@@ -1,0 +1,8 @@
+[project]
+name = "kplp"
+version = "1.0.0"
+description = "Kirmani Partners LP — public pitchbook"
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "mypy"]

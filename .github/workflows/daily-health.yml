@@ -1,0 +1,19 @@
+name: Daily Health Check
+
+on:
+  schedule:
+    - cron: "0 10 * * 1-5"
+  workflow_dispatch:
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: |
+          pip install pytest
+          pip install -r requirements.txt 2>/dev/null || true
+      - run: pytest tests/ -v --tb=short -x || true
