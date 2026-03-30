@@ -1,0 +1,29 @@
+{
+  "ecosystem": "kirmani-partners",
+  "component": "kplp",
+  "category": "app",
+  "version": "1.0.0",
+  "protocol": "KSP-2.0",
+  "signals": {
+    "emits": ["ANALYSIS", "HEALTH_CHECK", "STATUS"],
+    "consumes": ["REGIME_STATE", "RISK_LEVEL", "MARKET_DATA"]
+  },
+  "dependencies": {
+    "runtime": ["common-utils", "kirmani-signal-protocol"],
+    "optional": ["prod-monitor", "sentinel8"]
+  },
+  "integration": {
+    "kde_pipeline": true,
+    "signal_bus": true,
+    "monitoring": true,
+    "agent_mesh": true
+  },
+  "quality": {
+    "ci": true,
+    "tests": true,
+    "linting": true,
+    "typing": true,
+    "pre_commit": true,
+    "docker": true
+  }
+}

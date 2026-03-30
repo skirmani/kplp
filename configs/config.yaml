@@ -1,0 +1,23 @@
+# kplp Configuration
+# Part of Kirmani Partners LP Ecosystem
+
+app:
+  name: "kplp"
+  version: "1.0.0"
+  environment: "production"
+  log_level: "INFO"
+
+ecosystem:
+  protocol: "KSP-2.0"
+  signal_bus: true
+  monitoring: true
+
+risk:
+  max_position_heat: 0.015
+  max_sector_exposure: 0.25
+  cash_floor: 0.20
+
+performance:
+  cache_ttl: 300
+  batch_size: 1000
+  timeout: 30
