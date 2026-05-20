@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: Proprietary
+# Copyright (c) 2026 Kirmani Partners
+
 """Site builder and validator for Kirmani Partners pitchbook.
 
 Provides tools for building, validating, and analyzing the

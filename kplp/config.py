@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: Proprietary
+# Copyright (c) 2026 Kirmani Partners
+
 """kplp configuration."""
 import os
 from pathlib import Path

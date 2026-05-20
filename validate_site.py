@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: Proprietary
+# Copyright (c) 2026 Kirmani Partners
+
 """Validate kplp pitchbook site structure."""
 import os
 import re

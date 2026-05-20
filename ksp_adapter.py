@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: Proprietary
+# Copyright (c) 2026 Kirmani Partners
+
 """KSP adapter for kplp."""
 from datetime import datetime, timezone
 
