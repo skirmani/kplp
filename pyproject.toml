@@ -1,8 +1,66 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "kplp"
-version = "1.0.0"
-description = "Kirmani Partners LP — public pitchbook"
+version = "1.1.0"
+description = "Kirmani Partners LP — public pitchbook + site builder + KSP adapter"
+readme = "README.md"
 requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Shabeer Kirmani", email = "shabeerkirmani@gmail.com"}]
+keywords = ["pitchbook", "investment", "hedge-fund", "presentation",
+            "github-pages", "chartjs", "data-visualization", "finance"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial",
+]
+dependencies = [
+    "PyYAML>=6.0",
+    "jinja2>=3.1",
+]
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff", "mypy"]
+# NOTE: lighthouse-ci removed 2026-05-24 — it is an npm package
+# (`@lhci/cli`), not a PyPI package, and its presence here was blocking
+# `uv lock`. Install via npm separately: `npm install -g @lhci/cli`.
+dev = ["pytest>=7", "pytest-cov", "ruff>=0.4", "mypy>=1.10",
+       "pre-commit"]
+docs = ["mkdocs", "mkdocs-material"]
+
+[project.scripts]
+kplp-validate = "kplp.cli:validate_main"
+kplp-build = "kplp.cli:build_main"
+
+[project.urls]
+Homepage = "https://skirmani.github.io/kplp/"
+Repository = "https://github.com/skirmani/kplp"
+Issues = "https://github.com/skirmani/kplp/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["kplp*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers --cov=kplp --cov=site_builder --cov-fail-under=85"
+testpaths = ["tests"]
