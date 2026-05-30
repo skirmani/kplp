@@ -49,3 +49,8 @@ htmlcov/
 *.sqlite3
 *.csv
 !tests/*.csv
+
+# Attestation artifacts
+!reports/wfbt_*.json
+!reports/kplp_attestation_*.json
+

@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "attestation_type": "mechanism + real Polygon liveness",
+  "repo": "kplp",
+  "as_of_utc": "2026-05-30T17:33:10.798634+00:00",
+  "safety": {
+    "research_only": true,
+    "no_trade_signal": true,
+    "no_live_execution": true,
+    "no_reconcile_mutation": true,
+    "execution_status": "NO_GO_LIVE_EXECUTION_DISABLED",
+    "broker_connection": false,
+    "real_data_only": true,
+    "synthetic_data_used": false
+  },
+  "tests": [
+    {
+      "name": "file_inventory",
+      "result": "pass",
+      "files": {
+        "ksp_adapter.py": 28,
+        "site_builder.py": 163,
+        "validate_site.py": 30,
+        "kplp/config.py": 15,
+        "kplp/__init__.py": 5,
+        "kplp/core.py": 16,
+        "kplp/utils.py": 20
+      },
+      "total_files": 7,
+      "total_loc": 277
+    },
+    {
+      "name": "package_imports",
+      "result": "pass",
+      "loaded": [
+        "get_config",
+        "KplpCore",
+        "now_utc",
+        "format_signal"
+      ]
+    },
+    {
+      "name": "KplpCore",
+      "result": "pass",
+      "methods": [
+        "name",
+        "run",
+        "version"
+      ]
+    },
+    {
+      "name": "config_safety",
+      "result": "pass",
+      "cfg_keys": [
+        "name",
+        "version",
+        "base_dir"
+      ],
+      "has_safety_flag": false
+    },
+    {
+      "name": "utils",
+      "result": "pass",
+      "now_utc_type": "datetime",
+      "format_signal_keys": [
+        "source",
+        "signal_type",
+        "timestamp",
+        "payload"
+      ]
+    },
+    {
+      "name": "site_builder",
+      "result": "pass",
+      "classes": [
+        "ContentValidator",
+        "PageMetrics",
+        "Path",
+        "SEOChecker",
+        "SiteStructure",
+        "datetime"
+      ]
+    },
+    {
+      "name": "polygon_fetch_SPY",
+      "result": "pass",
+      "bars": 604
+    }
+  ]
+}
